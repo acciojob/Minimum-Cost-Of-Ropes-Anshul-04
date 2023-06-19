@@ -1,35 +1,32 @@
 function calculateMinCost() {
-  const input = document.getElementById('rope-input').value;
+  const input = document.getElementById('ropes-input').value;
   const ropes = input.split(',').map(Number);
 
-  // Create a min-heap priority queue
-  const PriorityQueue = require('./PriorityQueue');
-  const pq = new PriorityQueue();
+  // Create a priority queue (min-heap)
+  const priorityQueue = new MinHeap();
 
-  // Insert all the rope lengths into the priority queue
-  ropes.forEach((rope) => {
-    pq.insert(rope);
-  });
+  // Insert ropes into the priority queue
+  ropes.forEach((rope) => priorityQueue.insert(rope));
 
-  let totalCost = 0;
+  let minCost = 0;
 
   // Connect the ropes until only one rope remains in the priority queue
-  while (pq.size() > 1) {
+  while (priorityQueue.size() > 1) {
     // Extract the two smallest ropes from the priority queue
-    const rope1 = pq.extractMin();
-    const rope2 = pq.extractMin();
+    const rope1 = priorityQueue.extractMin();
+    const rope2 = priorityQueue.extractMin();
 
-    // Calculate the cost of connecting the ropes
+    // Calculate the cost of connecting the two ropes
     const cost = rope1 + rope2;
 
-    // Add the cost to the total cost
-    totalCost += cost;
+    // Add the cost to the total minimum cost
+    minCost += cost;
 
-    // Insert the combined rope length back into the priority queue
-    pq.insert(cost);
+    // Insert the connected rope back into the priority queue
+    priorityQueue.insert(cost);
   }
 
-  // Display the minimum cost inside the <div id="result"></div> element
   const resultDiv = document.getElementById('result');
-  resultDiv.textContent = totalCost.toString();
+  resultDiv.textContent = minCost.toString();
 }
+
